@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">FirebaseKaApp</string>
+    <string name="welcome_text">Welcome to Firebase ka App</string>
+    <string name="sign_in">Sign In</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="login_screen_welcome_text">Login to Your Account</string>
+    <string name="signup_screen_welcome_text">Create New Account</string>
+    <string name="enter_email_address">Enter Email Address</string>
+    <string name="enter_password">Enter Your Password</string>
+    <string name="enter_full_name">Enter Full Name</string>
+</resources>

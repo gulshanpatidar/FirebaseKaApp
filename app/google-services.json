@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "55254898017",
+    "project_id": "fir-kaapp",
+    "storage_bucket": "fir-kaapp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:55254898017:android:02ea930635471ac2ce2120",
+        "android_client_info": {
+          "package_name": "com.example.firebasekaapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "55254898017-3fplcqv4dfqkrm3l40plr4v6b890pvoe.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDNAA4nyiPRxZZirs_NRjG1ddOKLLxK8cM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "55254898017-3fplcqv4dfqkrm3l40plr4v6b890pvoe.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
