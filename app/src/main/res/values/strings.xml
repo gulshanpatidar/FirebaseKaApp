@@ -8,4 +8,9 @@
     <string name="enter_email_address">Enter Email Address</string>
     <string name="enter_password">Enter Your Password</string>
     <string name="enter_full_name">Enter Full Name</string>
+    <string name="newImagePostDescription">this is image of new post</string>
+    <string name="add_image_text">Add Image</string>
+    <string name="add_post_caption_hint">Enter the caption for your post</string>
+    <string name="addPostButtonText">Upload Post</string>
+    <string name="sign_out_text">Sign Out</string>
 </resources>
