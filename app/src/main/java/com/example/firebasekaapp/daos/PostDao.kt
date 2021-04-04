@@ -1,6 +1,7 @@
 package com.example.firebasekaapp.daos
 
 import android.net.Uri
+import com.example.firebasekaapp.models.Comment
 import com.example.firebasekaapp.models.Post
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.ktx.auth
@@ -61,6 +62,28 @@ class PostDao {
                 post.likedBy.add(currentUserId)
             }
             //update the post in the firebase now
+            postCollection.document(postId).set(post)
+        }
+    }
+
+    fun addComment(text: String,postId: String){
+        //now do the rest database task in the background
+        GlobalScope.launch {
+            //get the user id
+            val currentUserId = auth.currentUser!!.uid
+            //create instance of the user dao so that we can use it's methods
+            val userDao = UserDao()
+            //get the user task and convert it to user object
+            val user = userDao.getUserById(currentUserId).await().toObject(User::class.java)!!
+            //get the current time from the system
+            val currentTime = System.currentTimeMillis()
+            //get the post task and convert it to post object
+            val post = getPostById(postId).await().toObject(Post::class.java)!!
+            //create the instance of the comment
+            val comment = Comment(text,user,currentTime)
+            //add this comment to the post
+            post.comments.add(comment)
+            //update this post in the database
             postCollection.document(postId).set(post)
         }
     }

@@ -3,6 +3,8 @@ package com.example.firebasekaapp.adapters
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
@@ -30,6 +32,8 @@ class PostAdapter(options: FirestoreRecyclerOptions<Post>,private val listener: 
         val userImage: ImageView = itemView.findViewById(R.id.user_image_in_Post)
         val likeButton: ImageView = itemView.findViewById(R.id.like_button_in_post)
         val commentButton: ImageView = itemView.findViewById(R.id.comment_button_in_post)
+        val commentText: EditText = itemView.findViewById(R.id.comment_text_in_post)
+        val commentOutButton: Button = itemView.findViewById(R.id.comment_out_button_in_post)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostViewHolder {
@@ -37,6 +41,9 @@ class PostAdapter(options: FirestoreRecyclerOptions<Post>,private val listener: 
         viewHolder.likeButton.setOnClickListener {
             //call the onLikeClicked from here and pass the post id from the snapshots
             listener.onLikeClicked(snapshots.getSnapshot(viewHolder.adapterPosition).id)
+        }
+        viewHolder.commentButton.setOnClickListener{
+            listener.onCommentClicked(snapshots.getSnapshot(viewHolder.adapterPosition).id,viewHolder.commentText.text.toString())
         }
         return viewHolder
     }
@@ -68,4 +75,5 @@ class PostAdapter(options: FirestoreRecyclerOptions<Post>,private val listener: 
 //this interface is used to handle the click listener to the like button by taking the post id as argument
 interface IPostAdapter{
     fun onLikeClicked(postId: String)
+    fun onCommentClicked(postId: String,text: String)
 }

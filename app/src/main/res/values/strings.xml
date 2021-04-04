@@ -13,4 +13,6 @@
     <string name="add_post_caption_hint">Enter the caption for your post</string>
     <string name="addPostButtonText">Upload Post</string>
     <string name="sign_out_text">Sign Out</string>
+    <string name="enter_your_comment">Enter your comment</string>
+    <string name="comment_button_text">comment</string>
 </resources>

@@ -5,6 +5,8 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.Button
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -43,6 +45,11 @@ class MainActivity : AppCompatActivity(), IPostAdapter {
 
         postDao = PostDao()
         setupRecyclerView()
+
+        val commentButton: ImageView = findViewById(R.id.comment_button_in_post)
+        commentButton.setOnClickListener{
+
+        }
     }
 
     private fun setupRecyclerView() {
@@ -85,5 +92,9 @@ class MainActivity : AppCompatActivity(), IPostAdapter {
 
     override fun onLikeClicked(postId: String) {
         postDao.updateLikes(postId)
+    }
+
+    override fun onCommentClicked(postId: String, text: String) {
+        postDao.addComment(text,postId)
     }
 }
