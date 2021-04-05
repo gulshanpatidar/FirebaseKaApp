@@ -8,6 +8,7 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.firebasekaapp.R
@@ -34,6 +35,8 @@ class PostAdapter(options: FirestoreRecyclerOptions<Post>,private val listener: 
         val commentButton: ImageView = itemView.findViewById(R.id.comment_button_in_post)
         val commentText: EditText = itemView.findViewById(R.id.comment_text_in_post)
         val commentOutButton: Button = itemView.findViewById(R.id.comment_out_button_in_post)
+        val commentLinearLayout: View = itemView.findViewById(R.id.comment_linear_layout)
+        val viewAllComment: TextView = itemView.findViewById(R.id.view_all_comments_in_post)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostViewHolder {
@@ -43,8 +46,25 @@ class PostAdapter(options: FirestoreRecyclerOptions<Post>,private val listener: 
             listener.onLikeClicked(snapshots.getSnapshot(viewHolder.adapterPosition).id)
         }
         viewHolder.commentButton.setOnClickListener{
-            listener.onCommentClicked(snapshots.getSnapshot(viewHolder.adapterPosition).id,viewHolder.commentText.text.toString())
+            //show the comment edit text and comment button
+            if (viewHolder.commentLinearLayout.visibility == View.GONE){
+                viewHolder.commentLinearLayout.visibility = View.VISIBLE
+            }
+            else if (viewHolder.commentLinearLayout.visibility == View.VISIBLE){
+                viewHolder.commentLinearLayout.visibility = View.GONE
+            }
         }
+
+        viewHolder.commentOutButton.setOnClickListener {
+            //comment out the post
+            listener.onCommentClicked(snapshots.getSnapshot(viewHolder.adapterPosition).id,viewHolder.commentText.text.toString())
+            viewHolder.commentLinearLayout.visibility = View.GONE
+        }
+
+        viewHolder.viewAllComment.setOnClickListener {
+            listener.onViewCommentClicked(snapshots.getSnapshot(viewHolder.adapterPosition).id)
+        }
+
         return viewHolder
     }
 
@@ -70,10 +90,21 @@ class PostAdapter(options: FirestoreRecyclerOptions<Post>,private val listener: 
             holder.likeButton.setImageDrawable(ContextCompat.getDrawable(holder.likeButton.context,R.drawable.ic_unliked_icon))
         }
     }
+
+//    companion object DiffCallback: DiffUtil.ItemCallback<Post>(){
+//        override fun areItemsTheSame(oldItem: Post, newItem: Post): Boolean {
+//            return oldItem == newItem
+//        }
+//
+//        override fun areContentsTheSame(oldItem: Post, newItem: Post): Boolean {
+//            return oldItem.createdAt == newItem.createdAt
+//        }
+//    }
 }
 
 //this interface is used to handle the click listener to the like button by taking the post id as argument
 interface IPostAdapter{
     fun onLikeClicked(postId: String)
     fun onCommentClicked(postId: String,text: String)
+    fun onViewCommentClicked(postId: String)
 }

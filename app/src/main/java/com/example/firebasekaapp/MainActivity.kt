@@ -1,17 +1,16 @@
 package com.example.firebasekaapp
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.Button
-import android.widget.ImageView
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.firebasekaapp.adapters.IPostAdapter
 import com.example.firebasekaapp.adapters.PostAdapter
+import com.example.firebasekaapp.daos.CommentDao
 import com.example.firebasekaapp.daos.PostDao
 import com.example.firebasekaapp.databinding.ActivityMainBinding
 import com.example.firebasekaapp.models.Post
@@ -27,52 +26,46 @@ class MainActivity : AppCompatActivity(), IPostAdapter {
     private lateinit var auth: FirebaseAuth
     private lateinit var adapter: PostAdapter
     private lateinit var postDao: PostDao
+    private lateinit var commentDao: CommentDao
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = DataBindingUtil.setContentView(this,R.layout.activity_main)
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
 
         auth = Firebase.auth
 
-
-
-        binding.addPostButton.setOnClickListener {
-//            auth.signOut()
-            val intent = Intent(this,CreatePostActivity::class.java)
-            startActivity(intent)
-            finish()
-        }
-
         postDao = PostDao()
+        commentDao =  CommentDao()
         setupRecyclerView()
-
-        val commentButton: ImageView = findViewById(R.id.comment_button_in_post)
-        commentButton.setOnClickListener{
-
-        }
     }
 
     private fun setupRecyclerView() {
         val postCollection = postDao.postCollection
         val query = postCollection.orderBy("createdAt", Query.Direction.DESCENDING)
-        val recyclerViewOptions = FirestoreRecyclerOptions.Builder<Post>().setQuery(query,Post::class.java).build()
+        val recyclerViewOptions =
+            FirestoreRecyclerOptions.Builder<Post>().setQuery(query, Post::class.java).build()
 
-        adapter = PostAdapter(recyclerViewOptions,this)
+        adapter = PostAdapter(recyclerViewOptions, this)
 
         binding.recyclerViewMain.adapter = adapter
         binding.recyclerViewMain.layoutManager = LinearLayoutManager(this)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.activity_main_menu,menu)
+        menuInflater.inflate(R.menu.activity_main_menu, menu)
         return true
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == R.id.logOutMenuItem){
+        if (item.itemId == R.id.logOutMenuItem) {
             auth.signOut()
-            Toast.makeText(this,"You have been successfully logged out",Toast.LENGTH_LONG).show()
-            val intent = Intent(this,WelcomeActivity::class.java)
+            Toast.makeText(this, "You have been successfully logged out", Toast.LENGTH_LONG).show()
+            val intent = Intent(this, WelcomeActivity::class.java)
+            startActivity(intent)
+            finish()
+            return true
+        } else if (item.itemId == R.id.addPostButton) {
+            val intent = Intent(this, CreatePostActivity::class.java)
             startActivity(intent)
             finish()
             return true
@@ -95,6 +88,12 @@ class MainActivity : AppCompatActivity(), IPostAdapter {
     }
 
     override fun onCommentClicked(postId: String, text: String) {
-        postDao.addComment(text,postId)
+        commentDao.addComment(text, postId)
+    }
+
+    override fun onViewCommentClicked(postId: String) {
+        val intent = Intent(this,CommentActivity::class.java)
+        intent.putExtra("postId",postId)
+        startActivity(intent)
     }
 }

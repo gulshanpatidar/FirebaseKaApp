@@ -6,4 +6,9 @@
         android:id="@+id/logOutMenuItem"
         app:showAsAction="never"
         android:title="@string/sign_out_text"/>
+    <item
+        android:id="@+id/addPostButton"
+        app:showAsAction="ifRoom"
+        android:icon="@drawable/ic_baseline_add_24"
+        android:title="@string/create_post_title"/>
 </menu>
