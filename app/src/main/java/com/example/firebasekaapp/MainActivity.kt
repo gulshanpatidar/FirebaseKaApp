@@ -69,6 +69,10 @@ class MainActivity : AppCompatActivity(), IPostAdapter {
             startActivity(intent)
             finish()
             return true
+        } else if (item.itemId == R.id.gotoMainActivity){
+            val intent = Intent(this,MainActivity2::class.java)
+            startActivity(intent)
+            return true
         }
         return super.onOptionsItemSelected(item)
     }

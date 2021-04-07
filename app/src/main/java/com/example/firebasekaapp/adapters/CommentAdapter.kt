@@ -56,8 +56,8 @@ class CommentAdapter(val context: Context,val comments: List<Comment>,val postId
         val user = Firebase.auth.currentUser
         val comment = comments[position]
         holder.commentText.text = comment.text
-        holder.userName.text = user.displayName
-        holder.createdAt.text = Utils1.getTimeAgo(System.currentTimeMillis())
+        holder.userName.text = comment.commentedBy.username
+        holder.createdAt.text = Utils1.getTimeAgo(comment.commentedAt)
     }
 
     override fun getItemCount(): Int {

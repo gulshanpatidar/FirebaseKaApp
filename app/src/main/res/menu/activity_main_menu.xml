@@ -11,4 +11,8 @@
         app:showAsAction="ifRoom"
         android:icon="@drawable/ic_baseline_add_24"
         android:title="@string/create_post_title"/>
+
+    <item android:id="@+id/gotoMainActivity"
+        app:showAsAction="never"
+        android:title="Go to Main Activity"/>
 </menu>

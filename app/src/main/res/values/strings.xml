@@ -20,4 +20,12 @@
     <string name="like_button_in_comment_text">this image button is used to like the comment</string>
     <string name="view_all_comment_in_post_text">View all comments</string>
     <string name="reply_button_in_comment_text">Reply</string>
+    <string name="title_activity_main2">MainActivity</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+    <string name="title_search">Search</string>
+    <string name="title_feels">Feels</string>
+    <string name="title_activities">Activities</string>
+    <string name="title_profile">Profile</string>
 </resources>
