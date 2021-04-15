@@ -28,4 +28,12 @@
     <string name="title_feels">Feels</string>
     <string name="title_activities">Activities</string>
     <string name="title_profile">Profile</string>
+    <string name="edit_profile_text">Edit Profile</string>
+    <string name="saved_button_text">Saved</string>
+    <string name="done">Done</string>
+    <string name="posts">Posts</string>
+    <string name="followers">Followers</string>
+    <string name="following">Following</string>
+    <string name="follow">Follow</string>
+    <string name="message">Message</string>
 </resources>

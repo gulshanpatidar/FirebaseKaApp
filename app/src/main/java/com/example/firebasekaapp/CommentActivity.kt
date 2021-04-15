@@ -4,7 +4,6 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import com.example.firebasekaapp.adapters.CommentAdapter
-import com.example.firebasekaapp.daos.CommentDao
 import com.example.firebasekaapp.daos.PostDao
 import com.example.firebasekaapp.databinding.ActivityCommentBinding
 import com.example.firebasekaapp.models.Comment
@@ -19,7 +18,6 @@ class CommentActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityCommentBinding
     private lateinit var adapter: CommentAdapter
-    private lateinit var commentDao: CommentDao
     private lateinit var postId: String
     private lateinit var comments: List<Comment>
     private lateinit var postDao: PostDao
@@ -30,7 +28,6 @@ class CommentActivity : AppCompatActivity() {
 
         supportActionBar?.title = "Comments"
 
-        commentDao = CommentDao()
         postDao = PostDao()
 
         postId = intent.getStringExtra("postId")!!

@@ -8,8 +8,12 @@
     <fragment
         android:id="@+id/navigation_home"
         android:name="com.example.firebasekaapp.ui.home.HomeFragment"
-        android:label="@string/title_home"
-        tools:layout="@layout/fragment_home" />
+        android:label="@string/app_name"
+        tools:layout="@layout/fragment_home" >
+        <action
+            android:id="@+id/action_navigation_home_to_navigation_profile"
+            app:destination="@id/navigation_profile"/>
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_search"
@@ -33,5 +37,14 @@
         android:id="@+id/navigation_profile"
         android:name="com.example.firebasekaapp.ui.profile.ProfileFragment"
         android:label="@string/title_profile"
-        tools:layout="@layout/profile_fragment" />
+        tools:layout="@layout/profile_fragment">
+<!--        <argument-->
+<!--            android:name="userId"-->
+<!--            app:argType="String"/>-->
+        <argument
+            android:name="userId"
+            app:argType="string"
+            app:nullable="true"
+            android:defaultValue=""/>
+    </fragment>
 </navigation>

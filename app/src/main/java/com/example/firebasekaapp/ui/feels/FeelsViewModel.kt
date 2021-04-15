@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModel
 class FeelsViewModel : ViewModel() {
 
     private val _text = MutableLiveData<String>().apply {
-        value = "This is Feels Fragment"
+        value = "Feels coming soon..."
     }
     val text: LiveData<String> = _text
 }

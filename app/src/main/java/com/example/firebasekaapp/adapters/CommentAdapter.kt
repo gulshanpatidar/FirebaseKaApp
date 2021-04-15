@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.ListAdapter
 import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.firebasekaapp.R
 import com.example.firebasekaapp.Utils1
 import com.example.firebasekaapp.models.Comment
@@ -58,6 +59,7 @@ class CommentAdapter(val context: Context,val comments: List<Comment>,val postId
         holder.commentText.text = comment.text
         holder.userName.text = comment.commentedBy.username
         holder.createdAt.text = Utils1.getTimeAgo(comment.commentedAt)
+        Glide.with(holder.userImage.context).load(comment.commentedBy.userImage).circleCrop().into(holder.userImage)
     }
 
     override fun getItemCount(): Int {

@@ -3,30 +3,26 @@ package com.example.firebasekaapp
 import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
+import android.view.MenuInflater
 import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
-import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.firebasekaapp.adapters.IPostAdapter
-import com.example.firebasekaapp.adapters.PostAdapter
-import com.example.firebasekaapp.daos.CommentDao
+import androidx.navigation.findNavController
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.setupActionBarWithNavController
+import androidx.navigation.ui.setupWithNavController
 import com.example.firebasekaapp.daos.PostDao
 import com.example.firebasekaapp.databinding.ActivityMainBinding
-import com.example.firebasekaapp.models.Post
-import com.firebase.ui.firestore.FirestoreRecyclerOptions
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
-import com.google.firebase.firestore.Query
 import com.google.firebase.ktx.Firebase
 
-class MainActivity : AppCompatActivity(), IPostAdapter {
+class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var auth: FirebaseAuth
-    private lateinit var adapter: PostAdapter
-    private lateinit var postDao: PostDao
-    private lateinit var commentDao: CommentDao
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,70 +30,20 @@ class MainActivity : AppCompatActivity(), IPostAdapter {
 
         auth = Firebase.auth
 
-        postDao = PostDao()
-        commentDao =  CommentDao()
-        setupRecyclerView()
+        val navController = findNavController(R.id.nav_host_fragment)
+        // Passing each menu ID as a set of Ids because each
+        // menu should be considered as top level destinations.
+        val appBarConfiguration = AppBarConfiguration(
+            setOf(
+                R.id.navigation_home,
+                R.id.navigation_search,
+                R.id.navigation_feels,
+                R.id.navigation_activities,
+                R.id.navigation_profile
+            )
+        )
+        setupActionBarWithNavController(navController, appBarConfiguration)
+        binding.navView.setupWithNavController(navController)
     }
 
-    private fun setupRecyclerView() {
-        val postCollection = postDao.postCollection
-        val query = postCollection.orderBy("createdAt", Query.Direction.DESCENDING)
-        val recyclerViewOptions =
-            FirestoreRecyclerOptions.Builder<Post>().setQuery(query, Post::class.java).build()
-
-        adapter = PostAdapter(recyclerViewOptions, this)
-
-        binding.recyclerViewMain.adapter = adapter
-        binding.recyclerViewMain.layoutManager = LinearLayoutManager(this)
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.activity_main_menu, menu)
-        return true
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == R.id.logOutMenuItem) {
-            auth.signOut()
-            Toast.makeText(this, "You have been successfully logged out", Toast.LENGTH_LONG).show()
-            val intent = Intent(this, WelcomeActivity::class.java)
-            startActivity(intent)
-            finish()
-            return true
-        } else if (item.itemId == R.id.addPostButton) {
-            val intent = Intent(this, CreatePostActivity::class.java)
-            startActivity(intent)
-            finish()
-            return true
-        } else if (item.itemId == R.id.gotoMainActivity){
-            val intent = Intent(this,MainActivity2::class.java)
-            startActivity(intent)
-            return true
-        }
-        return super.onOptionsItemSelected(item)
-    }
-
-    override fun onStart() {
-        super.onStart()
-        adapter.startListening()
-    }
-
-    override fun onStop() {
-        super.onStop()
-        adapter.stopListening()
-    }
-
-    override fun onLikeClicked(postId: String) {
-        postDao.updateLikes(postId)
-    }
-
-    override fun onCommentClicked(postId: String, text: String) {
-        commentDao.addComment(text, postId)
-    }
-
-    override fun onViewCommentClicked(postId: String) {
-        val intent = Intent(this,CommentActivity::class.java)
-        intent.putExtra("postId",postId)
-        startActivity(intent)
-    }
 }

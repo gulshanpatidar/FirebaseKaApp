@@ -1,13 +1,173 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".ui.profile.ProfileFragment">
 
-    <TextView
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="Hello" />
+        tools:context=".ui.profile.ProfileFragment">
 
-</FrameLayout>
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/center_vertical_guideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:foregroundGravity="center_horizontal"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.5" />
+
+        <ImageView
+            android:id="@+id/user_image_in_profile"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:src="@drawable/ic_baseline_person_24" />
+
+        <LinearLayout
+            android:id="@+id/numbers_linear_layout_in_profile"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toEndOf="@id/user_image_in_profile"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="32dp"
+            android:layout_marginStart="32dp"
+            android:weightSum="3">
+
+            <TextView
+                android:id="@+id/number_of_post_in_profile"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="30sp"
+                app:layout_constraintStart_toEndOf="@id/user_image_in_profile"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="19"
+                android:layout_weight="1"/>
+
+            <TextView
+                android:id="@+id/number_of_followers_in_profile"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="30sp"
+                app:layout_constraintStart_toEndOf="@id/number_of_post_in_profile"
+                app:layout_constraintTop_toTopOf="@id/number_of_post_in_profile"
+                tools:text="451"
+                android:layout_weight="1"/>
+
+            <TextView
+                android:id="@+id/number_of_following_in_profile"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="30sp"
+                app:layout_constraintStart_toEndOf="@id/number_of_followers_in_profile"
+                app:layout_constraintTop_toTopOf="@id/number_of_followers_in_profile"
+                tools:text="402"
+                android:layout_weight="1"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/labels_linear_layout_in_profile"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginStart="32dp"
+            app:layout_constraintTop_toBottomOf="@id/numbers_linear_layout_in_profile"
+            app:layout_constraintStart_toEndOf="@id/user_image_in_profile"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:weightSum="3">
+
+            <TextView
+                android:id="@+id/number_of_post_text_in_profile"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toEndOf="@id/user_image_in_profile"
+                app:layout_constraintTop_toBottomOf="@id/number_of_post_in_profile"
+                android:text="@string/posts"
+                android:layout_weight="1"/>
+
+            <TextView
+                android:id="@+id/number_of_followers_text_in_profile"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toEndOf="@id/number_of_post_in_profile"
+                app:layout_constraintTop_toBottomOf="@id/number_of_followers_in_profile"
+                android:text="@string/followers"
+                android:layout_weight="1"/>
+
+            <TextView
+                android:id="@+id/number_of_following_text_in_profile"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toEndOf="@id/number_of_followers_text_in_profile"
+                app:layout_constraintTop_toBottomOf="@id/number_of_following_in_profile"
+                android:text="@string/following"
+                android:layout_weight="1"/>
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/user_name_in_profile"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:textSize="16sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/user_image_in_profile"
+            tools:text="Gulshan Patidar" />
+
+        <TextView
+            android:id="@+id/user_bio_in_profile"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            app:layout_constraintStart_toStartOf="@id/user_name_in_profile"
+            app:layout_constraintTop_toBottomOf="@id/user_name_in_profile"
+            tools:text="-IIITV'23 \n-Spreading happiness is ultimate goal" />
+
+        <LinearLayout
+            android:id="@+id/linear_layout_in_profile"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="2"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/user_bio_in_profile">
+
+
+            <Button
+                android:id="@+id/edit_profile_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_weight="1"
+                android:text="@string/edit_profile_text"
+                android:textAllCaps="false" />
+
+            <Button
+                android:id="@+id/saved_post_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="8dp"
+                android:layout_weight="1"
+                android:text="@string/saved_button_text"
+                android:textAllCaps="false" />
+        </LinearLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_view_profile"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/linear_layout_in_profile"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

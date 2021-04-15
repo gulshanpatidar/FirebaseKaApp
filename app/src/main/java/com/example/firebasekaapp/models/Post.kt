@@ -3,6 +3,7 @@ package com.example.firebasekaapp.models
 import android.net.Uri
 
 data class Post(
+    var postId: String = "",
     val text: String="",
     val imageUrl: String = "",
     val createdBy: User = User(),
