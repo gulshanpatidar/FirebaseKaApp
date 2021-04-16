@@ -79,6 +79,8 @@ dependencies {
     implementation 'pub.hanks:smallbang:1.2.2'
     implementation "androidx.navigation:navigation-fragment-ktx:$navigationVersion"
     implementation "androidx.navigation:navigation-ui-ktx:$navigationVersion"
+    //for circle image view
+    implementation 'de.hdodenhof:circleimageview:2.2.0'
 }
 
 // Adding the apply plugin statement for safeargs

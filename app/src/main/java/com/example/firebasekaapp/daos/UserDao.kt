@@ -1,6 +1,7 @@
 package com.example.firebasekaapp.daos
 
 import android.annotation.SuppressLint
+import android.util.Log
 import android.widget.Button
 import android.widget.TextView
 import com.example.firebasekaapp.R
@@ -58,7 +59,7 @@ class UserDao {
     }
 
     @SuppressLint("ResourceAsColor")
-    fun addFollower(targetUserId: String, view: Button,followers: TextView,following: TextView) {
+    fun addFollower(targetUserId: String, view: Button,followers: TextView?,following: TextView?) {
         GlobalScope.launch {
             val currentUser = getUserById(currentUserId).await().toObject(User::class.java)!!
             val targetUser = getUserById(targetUserId).await().toObject(User::class.java)!!
@@ -66,10 +67,14 @@ class UserDao {
                 currentUser.following.add(targetUserId)
                 targetUser.followers.add(currentUserId)
                 withContext(Dispatchers.Main){
-                    view.text = R.string.following.toString()
+                    view.text = "Following"
                     view.setBackgroundColor(R.color.material_on_background_disabled)
-                    followers.text = targetUser.followers.size.toString()
-                    following.text = targetUser.following.size.toString()
+                    if (followers != null) {
+                        followers.text = targetUser.followers.size.toString()
+                    }
+                    if (following != null) {
+                        following.text = targetUser.following.size.toString()
+                    }
                 }
             }
             usersCollection.document(currentUserId).set(currentUser)
@@ -78,7 +83,7 @@ class UserDao {
     }
 
     @SuppressLint("ResourceAsColor")
-    fun removeFollower(targetUserId: String, view: Button, followers: TextView, following: TextView) {
+    fun removeFollower(targetUserId: String, view: Button, followers: TextView?, following: TextView?) {
         GlobalScope.launch {
             val currentUser = getUserById(currentUserId).await().toObject(User::class.java)!!
             val targetUser = getUserById(targetUserId).await().toObject(User::class.java)!!
@@ -86,10 +91,14 @@ class UserDao {
                 currentUser.following.remove(targetUserId)
                 targetUser.followers.remove(currentUserId)
                 withContext(Dispatchers.Main){
-                    view.text = R.string.follow.toString()
+                    view.text = "Follow"
                     view.setBackgroundColor(R.color.design_default_color_on_primary)
-                    followers.text = targetUser.followers.size.toString()
-                    following.text = targetUser.following.size.toString()
+                    if (followers != null) {
+                        followers.text = targetUser.followers.size.toString()
+                    }
+                    if (following != null) {
+                        following.text = targetUser.following.size.toString()
+                    }
                 }
             }
             usersCollection.document(currentUserId).set(currentUser)

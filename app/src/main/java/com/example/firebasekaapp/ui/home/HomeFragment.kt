@@ -37,7 +37,7 @@ class HomeFragment : Fragment(), IPostAdapter {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         homeViewModel =
             ViewModelProvider(this).get(HomeViewModel::class.java)
         binding = FragmentHomeBinding.inflate(inflater, container, false)
@@ -60,13 +60,11 @@ class HomeFragment : Fragment(), IPostAdapter {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == R.id.logOutMenuItem) {
-            auth.signOut()
-            Toast.makeText(context, "You have been successfully logged out", Toast.LENGTH_LONG).show()
-            val intent = Intent(context, WelcomeActivity::class.java)
+        if (item.itemId == R.id.chat_menu_item) {
+            //do something of it
+            val intent = Intent(context,ChatActivity::class.java)
             startActivity(intent)
-//            activity?.supportFragmentManager?.beginTransaction()?.remove(this)
-            activity?.finish()
+            activity?.overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_left)
             return true
         } else if (item.itemId == R.id.addPostButton) {
             val intent = Intent(context, CreatePostActivity::class.java)

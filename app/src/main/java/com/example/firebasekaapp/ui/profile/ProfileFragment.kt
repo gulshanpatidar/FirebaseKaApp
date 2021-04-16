@@ -5,16 +5,15 @@ import android.app.AlertDialog
 import android.content.Intent
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
+import android.view.*
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import android.widget.Toast
 import coil.load
 import coil.transform.CircleCropTransformation
 import com.example.firebasekaapp.models.User
 import com.example.firebasekaapp.EditProfileActivity
 import com.example.firebasekaapp.R
+import com.example.firebasekaapp.WelcomeActivity
 import com.example.firebasekaapp.daos.UserDao
 import com.example.firebasekaapp.databinding.ProfileFragmentBinding
 import com.google.firebase.auth.FirebaseAuth
@@ -52,8 +51,8 @@ class ProfileFragment : Fragment() {
         val currentUserId = auth.currentUser!!.uid
 
         if (userId!!.isNotEmpty() && userId!=currentUserId){
-            binding.editProfileButton.text = R.string.follow.toString()
-            binding.savedPostButton.text = R.string.message.toString()
+            binding.editProfileButton.text = getString(R.string.follow)
+            binding.savedPostButton.text = getString(R.string.message)
             binding.editProfileButton.setOnClickListener {
                 userDao.addFollower(userId!!,binding.editProfileButton,binding.numberOfFollowersInProfile,binding.numberOfFollowingInProfile)
             }
@@ -79,7 +78,7 @@ class ProfileFragment : Fragment() {
                 binding.userNameInProfile.text = user.username
                 binding.userBioInProfile.text = user.bio
                 if (user.followers.contains(currentUserId)){
-                    binding.editProfileButton.text = R.string.following.toString()
+                    binding.editProfileButton.text = getString(R.string.following)
                     binding.editProfileButton.setBackgroundColor(R.color.material_on_background_disabled)
                     binding.editProfileButton.setOnClickListener {
                         showAlertDialog(userId)
@@ -93,6 +92,30 @@ class ProfileFragment : Fragment() {
         }
 
         return binding.root
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.fragment_profile_menu,menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+
+        if (item.itemId==R.id.logOutMenuItem){
+            auth.signOut()
+            Toast.makeText(context, "You have been successfully logged out", Toast.LENGTH_LONG).show()
+            val intent = Intent(context, WelcomeActivity::class.java)
+            startActivity(intent)
+//            activity?.supportFragmentManager?.beginTransaction()?.remove(this)
+            activity?.finish()
+            return true
+        }
+
+        return super.onOptionsItemSelected(item)
     }
 
     private fun showAlertDialog(userId: String) {

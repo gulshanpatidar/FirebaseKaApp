@@ -36,4 +36,7 @@
     <string name="following">Following</string>
     <string name="follow">Follow</string>
     <string name="message">Message</string>
+    <string name="search_icon_in_toolbar_description">Used to search the users</string>
+    <string name="search_user_hint">Search User</string>
+    <string name="chat">Chat</string>
 </resources>
