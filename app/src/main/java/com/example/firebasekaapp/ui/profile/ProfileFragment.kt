@@ -12,6 +12,7 @@ import coil.load
 import coil.transform.CircleCropTransformation
 import com.example.firebasekaapp.models.User
 import com.example.firebasekaapp.EditProfileActivity
+import com.example.firebasekaapp.MessageActivity
 import com.example.firebasekaapp.R
 import com.example.firebasekaapp.WelcomeActivity
 import com.example.firebasekaapp.daos.UserDao
@@ -31,6 +32,7 @@ class ProfileFragment : Fragment() {
     private lateinit var binding: ProfileFragmentBinding
     private lateinit var auth: FirebaseAuth
     private lateinit var userDao: UserDao
+    private var khudKiProfile = true
 
     @SuppressLint("ResourceAsColor")
     override fun onCreateView(
@@ -51,13 +53,16 @@ class ProfileFragment : Fragment() {
         val currentUserId = auth.currentUser!!.uid
 
         if (userId!!.isNotEmpty() && userId!=currentUserId){
+            khudKiProfile = false
             binding.editProfileButton.text = getString(R.string.follow)
             binding.savedPostButton.text = getString(R.string.message)
             binding.editProfileButton.setOnClickListener {
                 userDao.addFollower(userId!!,binding.editProfileButton,binding.numberOfFollowersInProfile,binding.numberOfFollowingInProfile)
             }
             binding.savedPostButton.setOnClickListener {
-                Toast.makeText(context,"Ruko Zara Sabr karo!!!",Toast.LENGTH_SHORT).show()
+                val intent = Intent(context,MessageActivity::class.java)
+                intent.putExtra("USER_ID",userId)
+                startActivity(intent)
             }
         }
         else{
@@ -79,7 +84,7 @@ class ProfileFragment : Fragment() {
                 binding.userBioInProfile.text = user.bio
                 if (user.followers.contains(currentUserId)){
                     binding.editProfileButton.text = getString(R.string.following)
-                    binding.editProfileButton.setBackgroundColor(R.color.material_on_background_disabled)
+                    binding.editProfileButton.setBackgroundColor(R.color.material_on_primary_disabled )
                     binding.editProfileButton.setOnClickListener {
                         showAlertDialog(userId)
                     }
@@ -100,7 +105,9 @@ class ProfileFragment : Fragment() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.fragment_profile_menu,menu)
+        if (khudKiProfile){
+            inflater.inflate(R.menu.fragment_profile_menu,menu)
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

@@ -12,8 +12,10 @@ import com.example.firebasekaapp.*
 import com.example.firebasekaapp.adapters.IPostAdapter
 import com.example.firebasekaapp.adapters.PostAdapter
 import com.example.firebasekaapp.daos.PostDao
+import com.example.firebasekaapp.daos.UserDao
 import com.example.firebasekaapp.databinding.FragmentHomeBinding
 import com.example.firebasekaapp.models.Post
+import com.example.firebasekaapp.models.User
 import com.firebase.ui.firestore.FirestoreRecyclerOptions
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
@@ -29,7 +31,6 @@ class HomeFragment : Fragment(), IPostAdapter {
 
     private lateinit var homeViewModel: HomeViewModel
     private lateinit var binding: FragmentHomeBinding
-    private lateinit var auth: FirebaseAuth
     private lateinit var adapter: PostAdapter
     private lateinit var postDao: PostDao
 
@@ -41,8 +42,6 @@ class HomeFragment : Fragment(), IPostAdapter {
         homeViewModel =
             ViewModelProvider(this).get(HomeViewModel::class.java)
         binding = FragmentHomeBinding.inflate(inflater, container, false)
-
-        auth = Firebase.auth
 
         postDao = PostDao()
         setupRecyclerView()
@@ -70,7 +69,7 @@ class HomeFragment : Fragment(), IPostAdapter {
             val intent = Intent(context, CreatePostActivity::class.java)
             startActivity(intent)
 //            activity?.supportFragmentManager?.beginTransaction()?.remove(this)
-            activity?.finish()
+//            activity?.finish()
             return true
         }
         return super.onOptionsItemSelected(item)

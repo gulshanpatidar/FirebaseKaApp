@@ -21,7 +21,7 @@ class PostDao {
     val postCollection = db.collection("posts")
 
     //get the user collection
-    val userCollection = db.collection("users")
+    private val userCollection = db.collection("users")
 
     //create an auth instance for finding the user data
     private val auth = Firebase.auth

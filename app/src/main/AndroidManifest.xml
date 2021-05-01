@@ -13,8 +13,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.FirebaseKaApp">
-        <activity android:name=".ChatActivity"
-        android:parentActivityName=".MainActivity">
+        <activity android:name=".MessageActivity">
+        </activity>
+        <activity
+            android:name=".ChatActivity"
+            android:parentActivityName=".MainActivity">
         </activity>
         <activity android:name=".EditProfileActivity"/>
         <activity

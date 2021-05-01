@@ -85,7 +85,8 @@ class CreatePostActivity : AppCompatActivity() {
                     postDao.addPost(binding.addPostCaption.text.toString(), url)
                     progressBar.dismiss()
                     val intent = Intent(this, MainActivity::class.java)
-                    startActivity(intent)
+//                    startActivity(intent)
+//                    onBackPressed()
                     finish()
                     Toast.makeText(this, "Post Uploaded Successfully!!!", Toast.LENGTH_LONG)
                         .show()
@@ -99,7 +100,6 @@ class CreatePostActivity : AppCompatActivity() {
 
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == Activity.RESULT_OK && data?.data != null) {
             filePath = data.data
-            Toast.makeText(this, "Uploading...", Toast.LENGTH_LONG).show()
         }
         binding.addImagePostButton.visibility = View.GONE
         binding.newImagePost.visibility = View.VISIBLE
@@ -107,19 +107,19 @@ class CreatePostActivity : AppCompatActivity() {
         binding.addPostButtonCreatePost.isEnabled = true
     }
 
-    override fun onBackPressed() {
-        super.onBackPressed()
-        val intent = Intent(this, MainActivity::class.java)
-        startActivity(intent)
-        finish()
-    }
+//    override fun onBackPressed() {
+//        super.onBackPressed()
+//        val intent = Intent(this, MainActivity::class.java)
+//        startActivity(intent)
+//        finish()
+//    }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
 
         return when (item.itemId) {
             android.R.id.home -> {
-                val intent = Intent(this, MainActivity::class.java)
-                startActivity(intent)
+//                val intent = Intent(this, MainActivity::class.java)
+//                startActivity(intent)
                 finish()
                 true
             }

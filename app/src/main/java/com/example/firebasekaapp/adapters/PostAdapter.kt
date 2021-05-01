@@ -145,20 +145,6 @@ class PostAdapter(options: FirestoreRecyclerOptions<Post>,private val listener: 
             holder.likeButtonAnimation.isSelected = false
         }
     }
-
-    fun timePass(){
-        Thread.sleep(500)
-    }
-
-//    companion object DiffCallback: DiffUtil.ItemCallback<Post>(){
-//        override fun areItemsTheSame(oldItem: Post, newItem: Post): Boolean {
-//            return oldItem == newItem
-//        }
-//
-//        override fun areContentsTheSame(oldItem: Post, newItem: Post): Boolean {
-//            return oldItem.createdAt == newItem.createdAt
-//        }
-//    }
 }
 
 //this interface is used to handle the click listener to the like button by taking the post id as argument

@@ -5,6 +5,7 @@ import android.util.Log
 import android.widget.Button
 import android.widget.TextView
 import com.example.firebasekaapp.R
+import com.example.firebasekaapp.models.Chat
 import com.example.firebasekaapp.models.User
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.ktx.auth
@@ -104,5 +105,10 @@ class UserDao {
             usersCollection.document(currentUserId).set(currentUser)
             usersCollection.document(targetUserId).set(targetUser)
         }
+    }
+
+    fun addChatsToUser(currentUser: User,targetUser: User){
+        usersCollection.document(currentUser.userId).set(currentUser)
+        usersCollection.document(targetUser.userId).set(targetUser)
     }
 }

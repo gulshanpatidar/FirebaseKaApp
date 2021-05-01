@@ -14,8 +14,7 @@ import com.example.firebasekaapp.models.User
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 
-class SearchAdapter(): ListAdapter<User,SearchAdapter.ViewHolder?>(DiffCallback)
-{
+class SearchAdapter() : ListAdapter<User, SearchAdapter.ViewHolder?>(DiffCallback) {
     private val currentUserId = Firebase.auth.currentUser!!.uid
     private val userDao = UserDao()
 
@@ -26,31 +25,33 @@ class SearchAdapter(): ListAdapter<User,SearchAdapter.ViewHolder?>(DiffCallback)
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val user = getItem(position)
         holder.followButton.setOnClickListener {
-            if (user.followers.contains(currentUserId)){
-                userDao.removeFollower(user.userId,holder.followButton,null,null)
-            }else{
-                userDao.addFollower(user.userId,holder.followButton,null,null)
+            if (user.followers.contains(currentUserId)) {
+                userDao.removeFollower(user.userId, holder.followButton, null, null)
+            } else {
+                userDao.addFollower(user.userId, holder.followButton, null, null)
             }
         }
-        holder.bind(user,currentUserId)
+        holder.bind(user, currentUserId)
     }
 
-    class ViewHolder(private var binding: UserSearchItemLayoutBinding) : RecyclerView.ViewHolder(binding.root) {
+    class ViewHolder(private var binding: UserSearchItemLayoutBinding) :
+        RecyclerView.ViewHolder(binding.root) {
         val followButton: Button = binding.followButtonInSearch
+
         @SuppressLint("ResourceAsColor")
-        fun bind(user: User, currentUserId: String){
+        fun bind(user: User, currentUserId: String) {
             binding.user = user
-            if (user.followers.contains(currentUserId)){
+            if (user.followers.contains(currentUserId)) {
                 binding.followButtonInSearch.text = "Following"
                 binding.followButtonInSearch.setBackgroundColor(R.color.material_on_background_disabled)
-            }else{
+            } else {
                 binding.followButtonInSearch.text = "Follow"
             }
             binding.executePendingBindings()
         }
     }
 
-    companion object DiffCallback: DiffUtil.ItemCallback<User>(){
+    companion object DiffCallback : DiffUtil.ItemCallback<User>() {
         override fun areItemsTheSame(oldItem: User, newItem: User): Boolean {
             return oldItem.userId == newItem.userId
         }
