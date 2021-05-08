@@ -5,7 +5,9 @@ import android.widget.ImageView
 import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
+import com.example.firebasekaapp.adapters.MessageAdapter
 import com.example.firebasekaapp.adapters.SearchAdapter
+import com.example.firebasekaapp.models.Message
 import com.example.firebasekaapp.models.User
 import com.example.firebasekaapp.ui.search.UserStatus
 import com.google.firebase.firestore.DocumentSnapshot
@@ -21,7 +23,7 @@ fun bindUserImage(imgView: ImageView,imgUrl: String?){
     }
 }
 
-@BindingAdapter("listData")
+@BindingAdapter("userListData")
 fun bindUserRecyclerView(recyclerView: RecyclerView,data: List<User>?){
     val adapter = recyclerView.adapter as SearchAdapter
     adapter.submitList(data)
@@ -42,4 +44,10 @@ fun bindSearchStatus(statusImageView: ImageView,status: UserStatus){
             statusImageView.visibility = View.GONE
         }
     }
+}
+
+@BindingAdapter("messagesListData")
+fun bindMessageRecyclerView(recyclerView: RecyclerView,data: List<Message>?){
+    val adapter = recyclerView.adapter as MessageAdapter
+    adapter.submitList(data)
 }

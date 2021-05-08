@@ -1,10 +1,14 @@
 package com.example.firebasekaapp
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
+import androidx.activity.viewModels
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import com.example.firebasekaapp.adapters.MessageAdapter
 import com.example.firebasekaapp.daos.ChatDao
 import com.example.firebasekaapp.daos.UserDao
@@ -12,6 +16,8 @@ import com.example.firebasekaapp.databinding.ActivityMessageBinding
 import com.example.firebasekaapp.models.Chat
 import com.example.firebasekaapp.models.Message
 import com.example.firebasekaapp.models.User
+import com.example.firebasekaapp.viewmodels.MessageViewModel
+import com.example.firebasekaapp.viewmodels.MessageViewModelFactory
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.Dispatchers
@@ -22,91 +28,52 @@ import kotlinx.coroutines.withContext
 
 class MessageActivity : AppCompatActivity() {
 
+    //ab mujhe is activity ke liye ek viewModel banana padega jiske andar ek live data banega or uski ki help se message ke data ko observe kiya jaayega or accordingly action liya jaayega. or bhi main is app ko efficient banane ke liye mvvm architecture ka use karne vala hu to bas dekhte jaaiye ki kya kya hota he yaha pe.
+
     private lateinit var binding: ActivityMessageBinding
-    private lateinit var userDao: UserDao
-    private lateinit var chatDao: ChatDao
-    private val currentUserId = Firebase.auth.currentUser!!.uid
-    private lateinit var currentUserChat: Chat
-    private lateinit var targetUserChat: Chat
-    private lateinit var currentUser: User
-    private lateinit var targetUser: User
     private lateinit var adapter: MessageAdapter
+    private lateinit var viewModel: MessageViewModel
+    private lateinit var viewModelFactory: MessageViewModelFactory
+    private lateinit var fromWhere: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this,R.layout.activity_message)
+        binding.lifecycleOwner = this
         supportActionBar?.title = "Messages"
-        userDao = UserDao()
-        chatDao = ChatDao()
         val targetUserId = intent.extras?.get("USER_ID")!!.toString()
+        fromWhere = intent.extras?.get("FROM_WHERE")!!.toString()
 
-        binding.sendMessageButton.setOnClickListener{
-            sendMessage()
+        viewModelFactory = MessageViewModelFactory(targetUserId)
+        viewModel = ViewModelProvider(this,viewModelFactory).get(MessageViewModel::class.java)
+        binding.viewModel = viewModel
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        adapter = MessageAdapter()
+        binding.messageActivityRecyclerView.adapter = adapter
+        viewModel.messages.observe(this, Observer {
+            adapter.notifyDataSetChanged()
+            binding.messageActivityRecyclerView.smoothScrollToPosition(it.size)
+        })
+        viewModel.clearEditText.observe(this, Observer {
+            binding.enterMessage.setText("")
+            it.and(false)
+        })
+    }
+    override fun onBackPressed() {
+        super.onBackPressed()
+        if (fromWhere=="ChatActivity"){
+            val intent = Intent(this,ChatActivity::class.java)
+            startActivity(intent)
         }
-
-        startChat(targetUserId)
-    }
-
-    private fun sendMessage() {
-        val textMessage = binding.enterMessage.text.toString()
-        binding.enterMessage.setText("")
-        addMessage(textMessage)
-    }
-
-    private fun startChat(targetUserId: String) {
-        val message = binding.enterMessage.text
-        GlobalScope.launch {
-            currentUser = userDao.getUserById(currentUserId).await().toObject(User::class.java)!!
-            targetUser = userDao.getUserById(targetUserId).await().toObject(User::class.java)!!
-            val allChats = currentUser.chats
-            var isChatExist = false
-            for (item in allChats){
-                if (item.user2Id==targetUserId){
-                    isChatExist = true
-                    currentUserChat = item
-                    break
-                }
-            }
-            targetUserChat = Chat(currentUserChat.messages,currentUserChat.user2Id,currentUserChat.user2Name,currentUserChat.user2Image,currentUserChat.user1Id,currentUserChat.user1Name,currentUserChat.user1Image)
-            if (!isChatExist){
-                currentUserChat = Chat(ArrayList(),currentUserId,currentUser.username,currentUser.userImage,targetUserId,targetUser.username,targetUser.userImage)
-                targetUserChat = Chat(ArrayList(),targetUserId,targetUser.username,targetUser.userImage,currentUserId,currentUser.username,currentUser.userImage)
-                currentUser.chats.add(currentUserChat)
-                targetUser.chats.add(targetUserChat)
-                userDao.addChatsToUser(currentUser,targetUser)
-            }
-//            val chat = chatDao.startChat(userId)
-            withContext(Dispatchers.Main){
-                adapter = MessageAdapter(currentUserChat.messages)
-                binding.messageActivityRecyclerView.adapter = adapter
-                binding.progressBarMessageActivity.visibility = View.GONE
-                supportActionBar?.title = targetUser.username
-                supportActionBar?.setDisplayHomeAsUpEnabled(true)
-            }
+        else{
+            finish()
         }
-    }
-
-    fun deleteMessage(message: Message, chat: Chat){
-        chat.messages.remove(message)
-    }
-
-    fun addMessage(text: String){
-        val message = Message(text = text, createdBy = currentUserId, createdAt = System.currentTimeMillis(),userImage = currentUser.userImage,userName = currentUser.username)
-        currentUser.chats.remove(currentUserChat)
-        targetUser.chats.remove(targetUserChat)
-        currentUserChat.messages.add(message)
-//        targetUserChat.messages.add(message)
-        currentUser.chats.add(currentUserChat)
-        targetUser.chats.add(targetUserChat)
-        userDao.addChatsToUser(currentUser,targetUser)
-        adapter.notifyDataSetChanged()
-        binding.messageActivityRecyclerView.smoothScrollToPosition(adapter.itemCount)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when(item.itemId){
             android.R.id.home ->{
-                finish()
+                onBackPressed()
                 true
             }
             else -> super.onOptionsItemSelected(item)

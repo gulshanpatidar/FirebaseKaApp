@@ -24,7 +24,7 @@ class UserDao {
     private val db = FirebaseFirestore.getInstance()
 
     //there are many collections. so choose the users collection from there
-    private val usersCollection = db.collection("users")
+    val usersCollection = db.collection("users")
 
     //create an instance of auth and current user id
     private val currentUserId = Firebase.auth.currentUser!!.uid

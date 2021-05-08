@@ -53,4 +53,8 @@ class SearchViewModel : ViewModel() {
             }
         }
     }
+
+    fun goToUserProfile(targetUserId: String){
+
+    }
 }

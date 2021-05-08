@@ -4,6 +4,8 @@ import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -14,7 +16,7 @@ import com.example.firebasekaapp.models.User
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 
-class SearchAdapter() : ListAdapter<User, SearchAdapter.ViewHolder?>(DiffCallback) {
+class SearchAdapter(private val clickListener: ISearchAdapter) : ListAdapter<User, SearchAdapter.ViewHolder?>(DiffCallback) {
     private val currentUserId = Firebase.auth.currentUser!!.uid
     private val userDao = UserDao()
 
@@ -31,12 +33,20 @@ class SearchAdapter() : ListAdapter<User, SearchAdapter.ViewHolder?>(DiffCallbac
                 userDao.addFollower(user.userId, holder.followButton, null, null)
             }
         }
+        holder.userImage.setOnClickListener{
+            clickListener.onUserClick(user.userId)
+        }
+        holder.userName.setOnClickListener{
+            clickListener.onUserClick(user.userId)
+        }
         holder.bind(user, currentUserId)
     }
 
     class ViewHolder(private var binding: UserSearchItemLayoutBinding) :
         RecyclerView.ViewHolder(binding.root) {
         val followButton: Button = binding.followButtonInSearch
+        val userImage: ImageView = binding.profileImageInSearch
+        val userName: TextView = binding.usernameInSearch
 
         @SuppressLint("ResourceAsColor")
         fun bind(user: User, currentUserId: String) {
@@ -60,4 +70,8 @@ class SearchAdapter() : ListAdapter<User, SearchAdapter.ViewHolder?>(DiffCallbac
             return oldItem == newItem
         }
     }
+}
+
+interface ISearchAdapter{
+    fun onUserClick(targetUserId: String)
 }

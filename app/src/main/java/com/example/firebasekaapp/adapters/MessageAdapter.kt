@@ -5,6 +5,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import coil.transform.CircleCropTransformation
@@ -16,15 +18,14 @@ import com.firebase.ui.firestore.FirestoreRecyclerOptions
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 
-class MessageAdapter(val messages: List<Message>) :
-    RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class MessageAdapter() : ListAdapter<Message,RecyclerView.ViewHolder>(DiffCallback) {
 
     private val currentUserId = Firebase.auth.currentUser!!.uid
     private val VIEW_TYPE_MESSAGE_SENT = 0
     private val VIEW_TYPE_MESSAGE_RECEIVED = 1
 
     override fun getItemViewType(position: Int): Int {
-        val message = messages[position]
+        val message = getItem(position)
         if (message.createdBy == currentUserId) {
             return VIEW_TYPE_MESSAGE_SENT
         } else {
@@ -76,15 +77,21 @@ class MessageAdapter(val messages: List<Message>) :
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when(holder.itemViewType){
             VIEW_TYPE_MESSAGE_SENT ->{
-                (holder as SentMessageViewHolder).bind(messages[position])
+                (holder as SentMessageViewHolder).bind(getItem(position))
             }
             VIEW_TYPE_MESSAGE_RECEIVED->{
-                (holder as ReceivedMessageViewHolder).bind(messages[position])
+                (holder as ReceivedMessageViewHolder).bind(getItem(position))
             }
         }
     }
 
-    override fun getItemCount(): Int {
-        return messages.size
+    companion object DiffCallback: DiffUtil.ItemCallback<Message>(){
+        override fun areItemsTheSame(oldItem: Message, newItem: Message): Boolean {
+            return oldItem.createdAt == newItem.createdAt
+        }
+
+        override fun areContentsTheSame(oldItem: Message, newItem: Message): Boolean {
+            return oldItem == newItem
+        }
     }
 }

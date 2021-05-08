@@ -26,6 +26,7 @@ class ChatActivity : AppCompatActivity(), IChatAdapter {
     private lateinit var binding: ActivityChatBinding
     private val currentUserId = Firebase.auth.currentUser!!.uid
     private lateinit var userDao: UserDao
+    private lateinit var adapter: ChatAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,7 +42,8 @@ class ChatActivity : AppCompatActivity(), IChatAdapter {
             val currentUser = userDao.getUserById(currentUserId).await().toObject(User::class.java)!!
             val chats = currentUser.chats
             withContext(Dispatchers.Main){
-                binding.chatActivityRecyclerView.adapter = ChatAdapter(chats,this@ChatActivity)
+                 adapter = ChatAdapter(chats,this@ChatActivity)
+                binding.chatActivityRecyclerView.adapter = adapter
             }
         }
     }
@@ -63,6 +65,8 @@ class ChatActivity : AppCompatActivity(), IChatAdapter {
         val intent = Intent(this,MessageActivity::class.java)
         val targetUserId = chat.user2Id
         intent.putExtra("USER_ID",targetUserId)
+        intent.putExtra("FROM_WHERE","ChatActivity")
         startActivity(intent)
+        finish()
     }
 }

@@ -23,7 +23,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:listData="@{viewModel.users}"
+            app:userListData="@{viewModel.users}"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
 
         <ImageView

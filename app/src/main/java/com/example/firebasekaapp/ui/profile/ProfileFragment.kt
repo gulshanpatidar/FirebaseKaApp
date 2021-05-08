@@ -62,6 +62,7 @@ class ProfileFragment : Fragment() {
             binding.savedPostButton.setOnClickListener {
                 val intent = Intent(context,MessageActivity::class.java)
                 intent.putExtra("USER_ID",userId)
+                intent.putExtra("FROM_WHERE","ProfileFragment")
                 startActivity(intent)
             }
         }
@@ -112,7 +113,7 @@ class ProfileFragment : Fragment() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
 
-        if (item.itemId==R.id.logOutMenuItem){
+        if (item.itemId==R.id.logOutMenuItem && khudKiProfile){
             auth.signOut()
             Toast.makeText(context, "You have been successfully logged out", Toast.LENGTH_LONG).show()
             val intent = Intent(context, WelcomeActivity::class.java)

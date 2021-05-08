@@ -1,10 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<layout>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <data>
+        <variable
+            name="viewModel"
+            type="com.example.firebasekaapp.viewmodels.MessageViewModel"/>
+    </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
@@ -19,7 +23,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            android:visibility="visible"/>
+            android:visibility="gone"/>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/message_activity_recycler_view"
@@ -28,26 +32,29 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:stackFromEnd="true"
-            app:layout_constraintBottom_toTopOf="@id/enter_message"/>
+            app:layout_constraintBottom_toTopOf="@id/enter_message"
+            app:messagesListData="@{viewModel.messages}"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
 
         <EditText
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:id="@+id/enter_message"
+            android:text="@={viewModel.messageText}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toStartOf="@id/sendMessageButton"
             android:layout_marginStart="16dp"
-            android:hint="Message..."
-            android:textSize="20sp"/>
+            android:hint="@string/enter_message_hint"
+            android:textSize="20sp" android:inputType="text"/>
 
         <ImageView
             android:layout_width="48dp" android:layout_height="48dp"
             android:id="@+id/sendMessageButton"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
+            android:onClick="@{() -> viewModel.sendMessage()}"
             android:src="@drawable/ic_send"
             android:layout_marginEnd="8dp"/>
 
